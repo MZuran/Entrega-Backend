@@ -26,6 +26,3 @@ app.get("/productos/:pid", (req, res) => {
     const {pid} = req.params
     res.json(manager.getProductById(parseInt(pid)))
 })
-
-// http://localhost:5000/productos?limit=0
-// http://localhost:5000/productos/4
