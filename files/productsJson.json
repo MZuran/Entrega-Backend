@@ -5,7 +5,9 @@
     "price": 1,
     "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Banana.png/836px-Banana.png",
     "code": "bananaCode",
+    "category": "fruit",
     "stock": 5,
+    "status": true,
     "id": 0
   },
   {
@@ -14,6 +16,8 @@
     "price": 2,
     "thumbnail": "https://purepng.com/public/uploads/large/purepng.com-red-appleapplemalus-domesticafruitdeliciousred-apple-1701527165367egm80.png",
     "code": "appleCode",
+    "status": true,
+    "category": "fruit",
     "stock": 5,
     "id": 1
   },
@@ -22,6 +26,8 @@
     "description": "It's orange",
     "price": 1.5,
     "code": "orangeCode",
+    "status": true,
+    "category": "fruit",
     "stock": 5,
     "id": 2,
     "thumbnail": "https://png.pngtree.com/png-clipart/20220620/original/pngtree-hand-drawn-delicious-orange-fruit-clipart-in-psd-and-png-png-image_8137237.png"
@@ -31,7 +37,9 @@
     "description": "They're purple",
     "price": 3,
     "code": "grapesCode",
+    "status": true,
     "stock": 5,
+    "category": "fruit",
     "id": 3,
     "thumbnail": "https://www.fourwindsgrowers.com/cdn/shop/products/blackmonukka_1024x1024.jpg?v=1538780984"
   },
@@ -41,6 +49,8 @@
     "price": 2.5,
     "code": "pineappleCode",
     "stock": 5,
+    "category": "fruit",
+    "status": true,
     "id": 4,
     "thumbnail": "https://m.media-amazon.com/images/I/71bNsWlkyeL._AC_UF894,1000_QL80_.jpg"
   },
@@ -50,6 +60,8 @@
     "price": 2,
     "code": "strawberryCode",
     "stock": 5,
+    "category": "fruit",
+    "status": true,
     "id": 5,
     "thumbnail": "https://th-thumbnailer.cdn-si-edu.com/HbjgFTByNBHi4ylALyGYvxr7_5E=/fit-in/1600x0/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/39/3c/393c51d9-ce11-49ce-9d41-5ef599dfabea/bn8e34.jpg"
   },
@@ -59,7 +71,20 @@
     "price": 2,
     "code": "kiwiCode",
     "stock": 5,
+    "category": "fruit",
+    "status": true,
     "id": 6,
     "thumbnail": "https://images.immediate.co.uk/production/volatile/sites/30/2020/02/Kiwi-fruits-582a07b.jpg?quality=90&resize=556,505"
+  },
+  {
+    "title": "Watermelon",
+    "description": "It's very watery",
+    "price": 12,
+    "thumbnail": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.walmart.com%2Fip%2FFresh-Seedless-Watermelon-Each%2F44391101&psig=AOvVaw0O61389E3vP4040DxHRvTf&ust=1700675587698000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLDN_LPU1YIDFQAAAAAdAAAAABAJ",
+    "code": "watermelonCode",
+    "category": "fruit",
+    "status": true,
+    "stock": 10,
+    "id": 7
   }
 ]

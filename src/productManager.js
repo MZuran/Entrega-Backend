@@ -1,15 +1,17 @@
-import {compareKeys} from "./auxiliary functions/compareKeys.js"
-import fs from "fs"
+import { compareKeys } from './auxiliary functions/compareKeys.js'
+import fs from 'fs'
 
 //*************************************************** Product Class ***************************************************
 class Product {
-  constructor(title, description, price, thumbnail, code, stock) {
+  constructor( title, description, price, thumbnail, code, stock, status, category, ) {
     this.title = title || ''
     this.description = description || ''
     this.price = price || 0
     this.thumbnail = thumbnail || ''
     this.code = code || 0
     this.stock = stock || 0
+    this.status = status || true
+    this.category = category || ''
   }
 }
 
@@ -18,6 +20,7 @@ class ProductManager {
   constructor(path) {
     this.path = path
     this.readProducts()
+    this.errorMessage = null
   }
 
   async readProducts() {
@@ -27,15 +30,12 @@ class ProductManager {
     })
   }
 
-  addProductRaw(title, description, price, thumbnail, code, stock) {
-    const product = new Product(
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-    )
+  addProductRaw( title, description, price, thumbnail, code, stock, status, category, ) {
+    if (!status) {
+      status = true
+    }
+
+    const product = new Product( title, description, price, thumbnail, code, stock, status, category, )
     this.addProduct(product)
   }
 
@@ -43,6 +43,7 @@ class ProductManager {
     const codeArray = this.products.map((product) => product.code)
     if (codeArray.includes(product.code)) {
       console.error('This code is already taken!')
+      this.errorMessage = 'This code is already taken!'
     } else {
       const productNumber = this.products.length
       let selfIncrementingId
@@ -67,7 +68,7 @@ class ProductManager {
       return foundProduct
     } else {
       console.error(`Product with an id of ${id} not found`)
-      return {error: `Product with an id of ${id} not found`}
+      return { error: `Product with an id of ${id} not found` }
     }
   }
 
@@ -78,10 +79,12 @@ class ProductManager {
         this.products[id] = updatedProduct
         this.updateFile()
       } else {
-        error('Wrong keys')
+        console.error('Wrong keys', updatedProduct)
+        this.errorMessage = 'Wrong keys'
       }
     } else {
       error('Id of the object cannot be updated')
+      this.errorMessage = 'Id of the object cannot be updated'
     }
   }
 
@@ -91,9 +94,14 @@ class ProductManager {
   }
 
   updateFile() {
-    fs.writeFile(this.path, JSON.stringify(this.products))
+    fs.writeFile(this.path, JSON.stringify(this.products), (err) => {
+      if (err) {
+        console.error(err);
+        this.errorMessage = err;
+      }
+    })
   }
 }
 
 //*************************************************** Exports ***************************************************
-export {ProductManager}
+export { ProductManager }

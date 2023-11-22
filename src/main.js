@@ -1,28 +1,22 @@
 import {ProductManager} from "./productManager.js"
+import { CartsManager } from "./cartsManager.js"
 import express from "express"
 
-const manager = new ProductManager('./files/productsExpanded.txt')
+import productRouter from "./routes/products.js"
+import cartRouter from "./routes/cart.js"
+
+export const manager = new ProductManager('./files/productsJson.json')
+export const cartManager = new CartsManager('./files/cartsJson.json')
+
 const app = express()
 
-app.listen("5000", () => {
-    console.log("Listening on port 5000")
+app.use((req, res, next)=> {
+    express.json()(req,res,next)
 })
 
-app.get("/", (req, res) => {
-    res.json({})
+app.listen("8080", () => {
+    console.log("Listening on port 8080")
 })
 
-app.get("/productos", (req, res) => {
-    const limit = parseInt(req.query.limit)
-
-    if (!limit) {
-        res.json(manager.getProducts())
-    } else {
-        res.json(manager.getProducts().slice(0, limit))
-    }
-})
-
-app.get("/productos/:pid", (req, res) => {
-    const {pid} = req.params
-    res.json(manager.getProductById(parseInt(pid)))
-})
+app.use('/api/products', productRouter )
+app.use('/api/carts', cartRouter )
