@@ -17,9 +17,8 @@ export const cartManager = new CartsManager('./files/cartsJson.json')
 //Initialize App
 const app = express()
 
-app.use((req, res, next)=> {
-    express.json()(req,res,next)
-})
+app.use((req, res, next)=> { express.json()(req,res,next) })
+app.use(express.urlencoded({extended: true}))
 
 const httpServer = app.listen("8080", () => {
     console.log("Listening on port 8080")

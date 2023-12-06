@@ -10,6 +10,12 @@ handlebarsRouter.get('/test', (req, res) => {
     res.render('index', testObject)
 })
 
+handlebarsRouter.post('/addSubmitForm', (req, res) => {
+    const {title, description, code, price, status, stock, category, thumbnail} = req.body
+
+    console.log("Submitted!", title)
+})
+
 handlebarsRouter.get('/', (req, res) => {
     const sentObject = {
         productsArray: manager.getProducts()
@@ -18,10 +24,7 @@ handlebarsRouter.get('/', (req, res) => {
 })
 
 handlebarsRouter.get('/realTimeProducts', (req, res) => {
-    const sentObject = {
-        productsArray: manager.getProducts()
-    }
-    res.render('realTimeProducts', sentObject)
+    res.render('realTimeProducts')
 })
 
 export default handlebarsRouter

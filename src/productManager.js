@@ -30,6 +30,11 @@ class ProductManager {
     })
   }
 
+  addProductRawObject(rawObjectProduct) {
+    const { title, description, price, thumbnail, code, stock, status, category } = rawObjectProduct
+    this.addProductRaw(title, description, price, thumbnail, code, stock, status, category)
+  }
+
   addProductRaw( title, description, price, thumbnail, code, stock, status, category, ) {
     if (!status) {
       status = true

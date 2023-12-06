@@ -23,7 +23,7 @@ productRouter.get("/:pid", (req, res) => {
 productRouter.post('/', function (req, res) {
     const {title, description, code, price, status, stock, category, thumbnail} = req.body
     const newProduct = {title, description, code, price, status, stock, category, thumbnail}
-
+    console.log("app post on api")
     if (checkObjectValues(newProduct)) {
         manager.addProductRaw(title, description, price, thumbnail, code, stock, status, category)
 
