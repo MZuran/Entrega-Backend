@@ -14,10 +14,7 @@ export function initializeSocket(httpServer) {
 
         socket.on("addProduct", (message) => {
             manager.addProductRawObject(message)
-            if (manager.errorMessage) {
-                console.log("The callback is", manager.errorMessage)
-                socket.emit("errorAddingProduct", manager.errorMessage)
-            }
+            if (manager.errorMessage) { socket.emit("errorAddingProduct", manager.errorMessage) }
         })
 
         socket.on("deleteProduct", (target) => { manager.deleteProduct(parseInt(target)) })

@@ -51,7 +51,6 @@ function submitButtonClickEvent() {
 
     let status = true
 
-    // Check if any field is empty
     if (!title || !description || !price || !thumbnail || !stock || !category || !code) {
         Swal.fire({ title: 'Error!', text: "Please fill all the fields!", icon: 'error' })
         return

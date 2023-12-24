@@ -1,4 +1,4 @@
-import { compareKeys } from './auxiliary functions/compareKeys.js'
+import { compareKeys } from '../auxiliary functions/compareKeys.js'
 import fs from 'fs'
 
 //*************************************************** Product Class ***************************************************

@@ -1,59 +1,46 @@
-import express from "express"
-import { manager } from "../main.js";
+import express from 'express'
+import { manager } from '../main.js'
 
-import { checkObjectValues } from "../auxiliary functions/checkObjectValues.js";
+import { checkObjectValues } from '../auxiliary functions/checkObjectValues.js'
 
 const productRouter = express.Router()
 
-productRouter.get("/", (req, res) => {
-    const limit = parseInt(req.query.limit)
+productRouter.get('/', async (req, res) => {
+  const limit = parseInt(req.query.limit)
 
-    if (!limit) {
-        res.json(manager.getProducts())
-    } else {
-        res.json(manager.getProducts().slice(0, limit))
-    }
+  try { res.send({ status: 200, payload: await manager.getAllProducts(limit) })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
 })
 
-productRouter.get("/:pid", (req, res) => {
-    const {pid} = req.params
-    res.json(manager.getProductById(parseInt(pid)))
+productRouter.get('/:pid', async (req, res) => {
+  const { pid } = req.params
+  
+  try { res.send({ status: 200, payload: await manager.getProductById(pid) })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
 })
 
-productRouter.post('/', function (req, res) {
-    const {title, description, code, price, status, stock, category, thumbnail} = req.body
-    const newProduct = {title, description, code, price, status, stock, category, thumbnail}
-    console.log("app post on api")
-    if (checkObjectValues(newProduct)) {
-        manager.addProductRaw(title, description, price, thumbnail, code, stock, status, category)
+productRouter.post('/', async function (req, res) {
+  const { title, description, code, price, status, stock, category, thumbnail, } = req.body
+  const newProduct = { title, description, code, price, status, stock, category, thumbnail, }
+  console.log('app post on api')
 
-        if (manager.errorMessage) {
-            res.status(400).send(`Error: ${manager.errorMessage}`)
-        } else {
-            res.send(`Product added successfully`)
-        }
-    } else {
-        res.status(400).send("Invalid product. It's not been added")
-    }
-  });
-
-  productRouter.put("/:pid", (req, res) => {
-    const {pid} = req.params
-    const updatedProperties = req.body
-
-    manager.updateProduct(parseInt(pid), updatedProperties)
-
-    if (manager.errorMessage) {
-        res.status(400).send(`Error: ${manager.errorMessage}`)
-    } else {
-        res.send(`Product updated successfully`)
-    }
+  try { res.send({ status: 200, payload: await manager.createProduct(newProduct) })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
 })
 
-productRouter.delete("/:pid", (req, res) => {
-    const {pid} = req.params
-    manager.deleteProduct(parseInt(pid))
-    res.send('Product deleted successfully')
+productRouter.put('/:pid', async (req, res) => {
+  const { pid } = req.params
+  const updatedProperties = req.body
+
+  try { res.send({ status: 200, payload: await manager.updateProduct(pid, updatedProperties) })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
 })
 
-  export default productRouter
+productRouter.delete('/:pid', async (req, res) => {
+  const { pid } = req.params
+
+  try { res.send({ status: 200, payload: await manager.deleteProduct(pid) })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
+})
+
+export default productRouter
