@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 import { initializeSocket } from "./server.js";
 
 import productDao from "./dao/dbManager/product.dao.js";
+import cartDao from "./dao/dbManager/cart.dao.js";
 
 //Initialize App
 const app = express()
@@ -42,6 +43,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
 
 //Data Access Objects
 export const manager = new productDao()
+export const cartManager = new cartDao()
 
 //Api
 app.use('/api/products', productRouter )

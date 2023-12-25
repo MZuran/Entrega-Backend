@@ -4,6 +4,7 @@ const socket = io()
 
 console.log("Script Loaded")
 
+//WebSocket Code (Outdated)
 const container = document.querySelector('#cardContainer')
 let submitButton
 let deleteButton
@@ -17,6 +18,8 @@ socket.on('products', (data) => {
     data.forEach(element => {
         cards += newCard(element)
     });
+    console.log("My data is", data)
+
     container.innerHTML = cards + productForm()
 
     submitButton = document.querySelector('#formSubmit')

@@ -1,8 +1,6 @@
 import express from 'express'
 import { manager } from '../main.js'
 
-import { checkObjectValues } from '../auxiliary functions/checkObjectValues.js'
-
 const productRouter = express.Router()
 
 productRouter.get('/', async (req, res) => {

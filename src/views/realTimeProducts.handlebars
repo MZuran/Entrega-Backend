@@ -3,21 +3,25 @@
     Real Time Products
   </h1>
   <div class='container'>
-    <div
-      class='row'
-      data-masonry='{"percentPosition": true }'
-      id='cardContainer'
-    >
+    <div class='row' data-masonry='{"percentPosition": true }' id='cardContainer' >
+      {{#each productsArray}}
+        <div class='card my-2 mx-2' style='width: 18rem;'>
+          <img src={{this.thumbnail}} class='card-img-top' alt={{this.title}} />
+          <div class='card-body'>
+            <div class='d-flex align-items-center'>
+              <h5 class='card-title'> {{this.title}} </h5>
+              <small class='text-muted mx-1'> ${{this.price}} </small>
+            </div>
+            <h6 class="text-info">{{this.category}}</h6>
+            <p class='card-text'> {{this.description}}. <i class='text-muted'>Items in stock: {{this.stock}}</i> </p>
+          </div>
+        </div>
+      {{/each}}
     </div>
   </div>
 </div>
 
-<script
-  src='https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js'
-  integrity='sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D'
-  crossorigin='anonymous'
-  async
-></script>
+<script src='https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js' integrity='sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D' crossorigin='anonymous' async ></script>
 <script src='js/rtProducts.js' type='module'></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src='/socket.io/socket.io.js'></script>

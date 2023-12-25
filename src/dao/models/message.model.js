@@ -6,6 +6,6 @@ const messageSchema = new Schema({
   date: { type: Date, required: true }
 });
 
-const messageModel = model("products", messageSchema);
+const messageModel = model("messages", messageSchema);
 
 export { messageModel };

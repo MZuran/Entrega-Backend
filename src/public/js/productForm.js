@@ -62,7 +62,7 @@ function removeProductForm() {
     <form target="dummyframe" id="deletedProductForm">
       <div class="form-group mb-2">
         <label for="formDeleteId">Please select what item to delete</label>
-        <input class="form-control" id="formDeleteId" placeholder="Id of item to delete" type="number" step="1" required>
+        <input class="form-control" id="formDeleteId" placeholder="Id of item to delete" required>
       </div>
     </form>
     <button id="formDelete" class="btn btn-danger mt-3">Delete</button>

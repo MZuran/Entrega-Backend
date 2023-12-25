@@ -4,20 +4,19 @@ import { manager } from "./main.js";
 export function initializeSocket(httpServer) {
     let io = new Server(httpServer);
   
-    io.on('connection', (socket) => {
+    io.on('connection', async (socket) => {
     
         socket.on('connectedClient', (message) => {
             console.log('A client says', message);
         })
         
-        socket.emit("products", manager.getProducts())
+        socket.emit("products", await manager.getAllProducts())
 
-        socket.on("addProduct", (message) => {
-            manager.addProductRawObject(message)
-            if (manager.errorMessage) { socket.emit("errorAddingProduct", manager.errorMessage) }
+        socket.on("addProduct", async (message) => {
+            await manager.createProduct(message)
         })
 
-        socket.on("deleteProduct", (target) => { manager.deleteProduct(parseInt(target)) })
+        socket.on("deleteProduct", async (target) => { await manager.deleteProduct(target) })
 
     })
     return io;

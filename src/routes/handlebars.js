@@ -16,15 +16,14 @@ handlebarsRouter.post('/addSubmitForm', (req, res) => {
     console.log("Submitted!", title)
 })
 
-handlebarsRouter.get('/', (req, res) => {
-    const sentObject = {
-        productsArray: manager.getProducts()
-    }
+handlebarsRouter.get('/', async (req, res) => {
+    const sentObject = { productsArray: await manager.getAllProducts() }
     res.render('home', sentObject)
 })
 
-handlebarsRouter.get('/realTimeProducts', (req, res) => {
-    res.render('realTimeProducts')
+handlebarsRouter.get('/realTimeProducts', async (req, res) => {
+    const sentObject = { productsArray: await manager.getAllProducts() }
+    res.render('realTimeProducts', sentObject)
 })
 
 export default handlebarsRouter

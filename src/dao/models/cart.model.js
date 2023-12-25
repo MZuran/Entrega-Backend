@@ -4,6 +4,6 @@ const cartSchema = new Schema({
   contents: { type: Array, required: true }
 });
 
-const cartModel = model("products", cartSchema);
+const cartModel = model("carts", cartSchema);
 
 export { cartModel };
