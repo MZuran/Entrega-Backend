@@ -47,7 +47,7 @@ export const cartManager = new cartDao()
 
 //Api
 app.use('/api/products', productRouter )
-//app.use('/api/carts', cartRouter )
+app.use('/api/carts', cartRouter )
 
 
 //Outdated

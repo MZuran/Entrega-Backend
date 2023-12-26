@@ -6,7 +6,6 @@ class cartDao {
     async getAllCarts(limitNumber) {
         //Handlebars NO FUNCIONA con los objetos de mongoose
         //Poner .lean() es para que esté en un formato que sí los pueda usar
-
         if (limitNumber) {
             return await this.model.find().limit(limitNumber).lean()
         } else {
@@ -20,6 +19,10 @@ class cartDao {
 
     async createCart(cart) {
         return await this.model.create(cart)
+    }
+
+    async addItemToCart(cartId, itemId) {
+        return await this.model.findAndModify()
     }
 
     async updateCart(id, cart) {

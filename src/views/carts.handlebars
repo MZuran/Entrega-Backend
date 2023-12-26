@@ -1,0 +1,57 @@
+<div class='mx-3'>
+  <h1>
+    Carts
+  </h1>
+  {{#each cartsArray}}
+    <p> <u> Cart {{this._id}} </u>
+      <br />
+      {{#each this.contents}}
+        <div class="cart-content">
+          <div>
+                <i class='text-secondary title'> {{this.details.title}} </i>
+            <br />
+            <i class='text-secondary'> Amount: {{this.amount}} </i>
+            <br />
+
+            <br />
+          </div>
+
+          <div id="{{this._id}}" class='card-container'>
+            <div class='card my-2 mx-2' style='width: 18rem;'>
+              <img
+                src={{this.details.thumbnail}}
+                class='card-img-top'
+                alt={{this.details.title}}
+              />
+              <div class='card-body'>
+                <div class='d-flex align-items-center'>
+                  <h5 class='card-title'>
+                    {{this.details.title}}
+                  </h5>
+                  <small class='text-muted mx-1'>
+                    ${{this.details.price}}
+                  </small>
+                </div>
+                <h6 class='text-info'>
+                  {{this.details.category}}
+                </h6>
+                <p class='card-text'>
+                  {{this.detaisl.description}}<i class='text-muted'>
+                    Items in stock: {{this.details.stock}}
+                  </i>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </p>
+  {{/each}}
+</div>
+
+<style>
+  .cart-content .card-container {
+    display: none;
+    position: absolute:
+  }
+</style>

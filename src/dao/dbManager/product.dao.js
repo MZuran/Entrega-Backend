@@ -15,7 +15,7 @@ class productDao {
     }
 
     async getProductById(id) {
-        return await this.model.findById(id)
+        return await this.model.findById(id).lean()
     }
 
     async createProduct(product) {
