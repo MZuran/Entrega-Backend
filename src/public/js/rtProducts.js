@@ -2,15 +2,13 @@ import { newCard } from "./newCard.js";
 import { productForm } from "./productForm.js";
 const socket = io()
 
-console.log("Script Loaded")
-
 //WebSocket Code (Outdated)
 const container = document.querySelector('#cardContainer')
 let submitButton
 let deleteButton
 
 socket.on('connect', () => {
-    socket.emit('connectedClient', "Hello!");
+    socket.emit('connectedClient', "Hello from rtProducts!");
 })
 
 socket.on('products', (data) => {

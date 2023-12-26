@@ -41,4 +41,8 @@ handlebarsRouter.get('/realTimeProducts', async (req, res) => {
     res.render('realTimeProducts', sentObject)
 })
 
+handlebarsRouter.get('/chat', async (req, res) => {
+    res.render('chat')
+})
+
 export default handlebarsRouter

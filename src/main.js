@@ -2,10 +2,11 @@ import express from "express"
 
 import handlebars from 'express-handlebars'
 import _dirname from "./utils.js";
-import handlebarsRouter from "./routes/handlebars.js";
+import handlebarsRouter from "./routes/handlebars.routes.js";
 
-import productRouter from "./routes/products.js"
-import cartRouter from "./routes/cart.js"
+import productRouter from "./routes/products.routes.js"
+import cartRouter from "./routes/cart.routes.js"
+import chatRouter from "./routes/chat.routes.js";
 
 import mongoose from "mongoose";
 
@@ -13,6 +14,7 @@ import { initializeSocket } from "./server.js";
 
 import productDao from "./dao/dbManager/product.dao.js";
 import cartDao from "./dao/dbManager/cart.dao.js";
+import chatDao from "./dao/dbManager/chat.dao.js";
 
 //Initialize App
 const app = express()
@@ -44,10 +46,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
 //Data Access Objects
 export const manager = new productDao()
 export const cartManager = new cartDao()
+export const chatManager = new chatDao()
 
 //Api
 app.use('/api/products', productRouter )
 app.use('/api/carts', cartRouter )
+app.use('/api/chat', chatRouter)
 
 
 //Outdated
