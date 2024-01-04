@@ -3,15 +3,13 @@ import { productModel } from "../models/product.model.js"
 class productDao {
     constructor() { this.model = productModel }
 
-    async getAllProducts(limitNumber) {
-        //Handlebars NO FUNCIONA con los objetos de mongoose
-        //Poner .lean() es para que esté en un formato que sí los pueda usar
+    async getAllProducts(queryObject) {
+        const {limit, page, sort, query} = queryObject
 
-        if (limitNumber) {
-            return await this.model.find().limit(limitNumber).lean()
-        } else {
-            return await this.model.find().lean()
-        }
+        //return await this.model.find().limit(limit).lean()
+        //Example of a req using all of these params:
+        //http://localhost:8080/api/products/?limit=2&page=1&sort=desc&query={"price":{"$lte":5}}
+        return await this.model.paginate(query,{limit: limit, page: page, sort: sort})
     }
 
     async getProductById(id) {

@@ -8,6 +8,11 @@ cartRouter.get('/', async (req, res) => {
   } catch (err) { res.send({ status: 400, payload: err, }) }
 })
 
+cartRouter.get('/aggregationTest', async (req, res) => {
+  try { res.send({ status: 200, payload: await cartManager.aggregateTest() })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
+})
+
 cartRouter.post('/', async function (req, res) {
   try { res.send({ status: 200, payload: await cartManager.createCart(req.body) })
   } catch (err) { res.send({ status: 400, payload: err, input: req.body }) }

@@ -32,6 +32,18 @@ class cartDao {
     async deleteCart(id) {
         return await this.model.findByIdAndDelete(id)
     }
+
+    async aggregateTest() {
+        return await this.model.aggregate([
+            {$match: {"contents.amount": 10}},
+            {$lookup: {
+                from: "contents.product",
+                localField: "title",
+                foreignField: "contents.product._id",
+                as: "product",
+            }}
+        ])
+    }
 }
 
 export default cartDao

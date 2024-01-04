@@ -1,12 +1,18 @@
 import express from 'express'
 import { manager } from '../main.js'
+import { parseQueryParams } from '../auxiliary functions/parseQuery.js'
 
 const productRouter = express.Router()
 
 productRouter.get('/', async (req, res) => {
-  const limit = parseInt(req.query.limit)
+  const queryObject = parseQueryParams(req)
+  try { res.send({ status: 200, payload: await manager.getAllProducts(queryObject) })
+  } catch (err) { res.send({ status: 400, payload: err, }) }
+})
 
-  try { res.send({ status: 200, payload: await manager.getAllProducts(limit) })
+productRouter.get('/queryObject', async (req, res) => {
+  const queryObject = parseQueryParams(req)
+  try { res.send({ status: 200, payload: queryObject })
   } catch (err) { res.send({ status: 400, payload: err, }) }
 })
 
