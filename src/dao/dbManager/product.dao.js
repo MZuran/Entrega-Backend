@@ -5,11 +5,13 @@ class productDao {
 
     async getAllProducts(queryObject) {
         const {limit, page, sort, query} = queryObject
-
         //return await this.model.find().limit(limit).lean()
+        
         //Example of a req using all of these params:
         //http://localhost:8080/api/products/?limit=2&page=1&sort=desc&query={"price":{"$lte":5}}
-        return await this.model.paginate(query,{limit: limit, page: page, sort: sort})
+
+        //Lean is for compatibility with handlebars. Having it on means the returned doc is a javascript object.
+        return await this.model.paginate(query,{limit: limit, page: page, sort: sort, lean: true})
     }
 
     async getProductById(id) {

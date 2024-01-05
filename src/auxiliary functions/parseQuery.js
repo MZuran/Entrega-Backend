@@ -17,10 +17,5 @@ export function parseQueryParams(req) {
     sort = { price: sortVal }
   }
 
-  return {
-    limit: limit,
-    page: page,
-    sort: sort, 
-    query: query
-  }
+  return { limit: limit, page: page, sort: sort, query: query }
 }

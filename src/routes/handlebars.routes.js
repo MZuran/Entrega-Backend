@@ -1,6 +1,7 @@
 import express from "express"
 import { manager } from "../main.js"
 import { cartManager } from "../main.js"
+import { parseQueryParams } from "../auxiliary functions/parseQuery.js"
 
 const handlebarsRouter = express.Router()
 
@@ -18,7 +19,12 @@ handlebarsRouter.post('/addSubmitForm', (req, res) => {
 })
 
 handlebarsRouter.get('/', async (req, res) => {
-    const sentObject = { productsArray: await manager.getAllProducts() }
+    const queryObject = parseQueryParams(req)
+    const productData = await manager.getAllProducts(queryObject)
+    const sentObject = {productsArray: productData.docs}
+
+    //console.log("Sent Object", sentObject)
+
     res.render('home', sentObject)
 })
 
@@ -37,7 +43,7 @@ handlebarsRouter.get('/carts', async (req, res) => {
 })
 
 handlebarsRouter.get('/realTimeProducts', async (req, res) => {
-    const sentObject = { productsArray: await manager.getAllProducts() }
+    const sentObject = { productsArray: await manager.getAllProducts(req) }
     res.render('realTimeProducts', sentObject)
 })
 

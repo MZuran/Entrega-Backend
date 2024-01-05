@@ -6,6 +6,7 @@ const productRouter = express.Router()
 
 productRouter.get('/', async (req, res) => {
   const queryObject = parseQueryParams(req)
+  
   try { res.send({ status: 200, payload: await manager.getAllProducts(queryObject) })
   } catch (err) { res.send({ status: 400, payload: err, }) }
 })
