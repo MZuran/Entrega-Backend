@@ -68,6 +68,11 @@ app.use(session({
     })
 }))
 
+export function logOut() {
+    //req.session.destroy(err => console.log(err))
+    alert(test)
+}
+
 //Data Access Objects
 export const manager = new productDao()
 export const cartManager = new cartDao()

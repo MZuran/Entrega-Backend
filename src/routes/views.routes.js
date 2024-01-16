@@ -21,11 +21,9 @@ viewsRouter.post('/addSubmitForm', (req, res) => {
 viewsRouter.get('/', async (req, res) => {
     const queryObject = parseQueryParams(req)
     const productData = await manager.getAllProducts(queryObject)
-    const sentObject = {productsArray: productData.docs}
+    const sentObject = {productsArray: productData.docs, user: req.session.user}
 
-    //console.log("Sent Object", sentObject)
-
-    res.render('home', sentObject)
+    res.render('products', sentObject)
 })
 
 viewsRouter.get('/carts', async (req, res) => {

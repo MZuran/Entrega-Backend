@@ -3,6 +3,12 @@ import { userModel } from '../dao/models/user.model.js'
 
 const sessionRouter = express.Router()
 
+const adminSession = {
+  name: `Administrator`,
+  email: "adminCoder@coder.com",
+  age: 0
+}
+
 //Register
 sessionRouter.post('/register', async (req, res) => {
   const { first_name, last_name, email, age, password } = req.body
@@ -31,6 +37,12 @@ sessionRouter.post('/login', async (req, res) => {
     }
 
     res.send({status: "success", payload: {message: "Logged in successfully", user: req.session.user}})
+})
+
+//Logout
+sessionRouter.post('/logout', async (req, res) => {
+  req.session.destroy()
+  res.send({status: "success", payload: {}})
 })
 
 export default sessionRouter

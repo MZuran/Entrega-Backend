@@ -1,8 +1,20 @@
 <script src='https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js' integrity='sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D' crossorigin='anonymous' async ></script>
+<script src="/js/products.js"></script>
 <div class='mx-3'>
+  <div class="d-flex justify-content-between">
   <h1>
     Products
   </h1>
+  <div>
+  {{#if user}}
+  <p>Welcome back {{user.name}}! <br>
+  Is this not you? <a href="" onclick="onClickTest()">Logout</a></p>
+  {{else}}
+  <p>Welcome! <br>
+  New to our site? <a href="/users/login">Log in</a></p>
+  {{/if}}
+  </div>
+  </div>
   <div class='container'>
     <div class='row' data-masonry='{"percentPosition": true }'>
       {{#each productsArray}}
