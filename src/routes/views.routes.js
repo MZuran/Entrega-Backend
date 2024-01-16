@@ -3,22 +3,22 @@ import { manager } from "../main.js"
 import { cartManager } from "../main.js"
 import { parseQueryParams } from "../auxiliary functions/parseQuery.js"
 
-const handlebarsRouter = express.Router()
+const viewsRouter = express.Router()
 
-handlebarsRouter.get('/test', (req, res) => {
+viewsRouter.get('/test', (req, res) => {
     const testObject = {
         var1: "x"
     }
     res.render('index', testObject)
 })
 
-handlebarsRouter.post('/addSubmitForm', (req, res) => {
+viewsRouter.post('/addSubmitForm', (req, res) => {
     const {title, description, code, price, status, stock, category, thumbnail} = req.body
 
     console.log("Submitted!", title)
 })
 
-handlebarsRouter.get('/', async (req, res) => {
+viewsRouter.get('/', async (req, res) => {
     const queryObject = parseQueryParams(req)
     const productData = await manager.getAllProducts(queryObject)
     const sentObject = {productsArray: productData.docs}
@@ -28,7 +28,7 @@ handlebarsRouter.get('/', async (req, res) => {
     res.render('home', sentObject)
 })
 
-handlebarsRouter.get('/carts', async (req, res) => {
+viewsRouter.get('/carts', async (req, res) => {
     let cartsArray = await cartManager.getAllCarts()
     let productsArray = []
 
@@ -42,13 +42,13 @@ handlebarsRouter.get('/carts', async (req, res) => {
     res.render('carts', sentObject)
 })
 
-handlebarsRouter.get('/realTimeProducts', async (req, res) => {
+viewsRouter.get('/realTimeProducts', async (req, res) => {
     const sentObject = { productsArray: await manager.getAllProducts(req) }
     res.render('realTimeProducts', sentObject)
 })
 
-handlebarsRouter.get('/chat', async (req, res) => {
+viewsRouter.get('/chat', async (req, res) => {
     res.render('chat')
 })
 
-export default handlebarsRouter
+export default viewsRouter

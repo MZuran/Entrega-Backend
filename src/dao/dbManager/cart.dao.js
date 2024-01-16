@@ -1,4 +1,7 @@
 import { cartModel } from "../models/cart.model.js"
+import mongoose from "mongoose"
+
+import { stringToObjectId } from "../../auxiliary functions/parseStringToObjectId.js"
 
 class cartDao {
     constructor() { this.model = cartModel }
@@ -31,6 +34,34 @@ class cartDao {
 
     async deleteCart(id) {
         return await this.model.findByIdAndDelete(id)
+    }
+
+    async findProductInCart(cartId, productId) {
+        const cid = stringToObjectId(cartId)
+        const pid = stringToObjectId(productId)
+
+        return await this.model.aggregate([
+            {$match: {"_id": cid}},
+            {$project: { _id: 0, __v: 0 }},
+            {$unwind: "$contents"},
+            {$match: {"contents.product": pid}},
+            {$project: {
+                "product": "$contents.product",
+                "amount": "$contents.amount"
+            }}
+        ])
+    }
+    
+    async deleteProduct(cartId, productId) {
+        const cid = stringToObjectId(cartId)
+        const pid = stringToObjectId(productId)
+
+        return await this.model.aggregate([
+            {$match: {"_id": cid}},
+            {$project: { _id: 0, __v: 0 }},
+            {$unwind: "$contents"},
+            {$match: {"contents.product": pid}},
+        ])
     }
 
     async aggregateTest() {

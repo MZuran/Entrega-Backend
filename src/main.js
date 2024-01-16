@@ -1,20 +1,33 @@
 import express from "express"
 
+//Import Handlebars Components
 import handlebars from 'express-handlebars'
 import _dirname from "./utils.js";
-import handlebarsRouter from "./routes/handlebars.routes.js";
 
+//Import Views
+import viewsRouter from "./routes/views.routes.js";
+import userViewsRouter from "./routes/users.views.routes.js";
+
+//Import API routes
 import productRouter from "./routes/products.routes.js"
 import cartRouter from "./routes/cart.routes.js"
 import chatRouter from "./routes/chat.routes.js";
+import sessionRouter from "./routes/sessions.routes.js";
 
+//Mongo
 import mongoose from "mongoose";
 
+//Websockets
 import { initializeSocket } from "./server.js";
 
+//Import Data Access Objects
 import productDao from "./dao/dbManager/product.dao.js";
 import cartDao from "./dao/dbManager/cart.dao.js";
 import chatDao from "./dao/dbManager/chat.dao.js";
+
+//Import Sessions and Connect mongo for session management
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 //Initialize App
 const app = express()
@@ -33,29 +46,38 @@ app.set('view engine', 'handlebars')
 
 app.use(express.static(_dirname + '/public'))
 
-app.use('/', handlebarsRouter)
-
 //Web Socket
 const io = initializeSocket(httpServer)
 
 //MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
+const mongoDBUrl = 'mongodb://127.0.0.1:27017/ecommerce'
+mongoose.connect(mongoDBUrl)
 .then(() => console.log("Connected to Database"))
 .catch((err) => console.log(err))
+
+//Sessions
+app.use(session({
+    secret: "secretKey",
+    resave: true,
+    saveUninitialized: true,
+    //Filestore
+    store: MongoStore.create({
+        mongoUrl: mongoDBUrl,
+        ttl: 10 * 60,
+        //mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+    })
+}))
 
 //Data Access Objects
 export const manager = new productDao()
 export const cartManager = new cartDao()
 export const chatManager = new chatDao()
 
-//Api
+//Routes
 app.use('/api/products', productRouter )
 app.use('/api/carts', cartRouter )
 app.use('/api/chat', chatRouter)
+app.use('/api/sessions', sessionRouter)
 
-
-//Outdated
-/*
-export const manager = new ProductManager('./files/productsJson.json')
-export const cartManager = new CartsManager('./files/cartsJson.json')
-*/
+app.use('/', viewsRouter)
+app.use('/users', userViewsRouter)

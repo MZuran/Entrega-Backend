@@ -30,6 +30,5 @@ export function initializeSocket(httpServer) {
     })
 
     
-
     return io;
   }
