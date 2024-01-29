@@ -1,18 +1,13 @@
 import express from 'express'
 import { userModel } from '../dao/models/user.model.js'
 
+import { createHash, isValidPassword } from '../utils.js'
+
 const sessionRouter = express.Router()
 
-const adminSession = {
-  name: `Administrator`,
-  email: "adminCoder@coder.com",
-  age: 0,
-  role: "admin"
-}
+//const adminSession = { name: `Administrator`, email: "adminCoder@coder.com", age: 0, role: "admin" }
 
-function adminCredentials(email, password) {
-  return email == "adminCoder@coder.com" && password == "adminCod3r123"
-}
+function adminCredentials(email, password) { return email == "adminCoder@coder.com" && password == "adminCod3r123" }
 
 //Register
 sessionRouter.post('/register', async (req, res) => {
@@ -22,7 +17,7 @@ sessionRouter.post('/register', async (req, res) => {
   const exists = await userModel.findOne({email})
   if (exists) {res.status(400).send({status: "error", payload: {message: "User already registered in DB"}})}
 
-  const user = { first_name, last_name, email, age, password }
+  const user = { first_name, last_name, email, age, password: createHash(password) }
 
   const result = userModel.create(user)
   res.send({status: "success", payload: {message: "User created successfully", user: result}})
@@ -31,21 +26,22 @@ sessionRouter.post('/register', async (req, res) => {
 //Login
 sessionRouter.post('/login', async (req, res) => {
     const {email, password} = req.body
-    const user = await userModel.findOne({email, password})
-    const isAdmin = adminCredentials(email, password)
+    const user = await userModel.findOne({email})
+    /* const isAdmin = adminCredentials(email, password) */
 
-    if (!user && !isAdmin) {return res.status(401).send({status: "error", payload: {message: "Incorrect credentials"}})}
+    if (!user /* && !isAdmin */) {return res.status(400).send({status: "error", payload: {message: "User not Found"}})}
+    if (!isValidPassword(user,password)) {return res.status(403).send({status: "error", error: "Incorrect Password"})}
 
-    if (!isAdmin) {
+    delete user.password;
+    
     req.session.user = {
         name: `${user.first_name} ${user.last_name}`,
         email: user.email,
         age: user.age,
         role: user.role
     }
-    }
 
-    if (isAdmin) {req.session.user = adminSession}
+    //if (isAdmin) {req.session.user = adminSession}
 
     res.send({status: "success", payload: {message: "Logged in successfully", user: req.session.user}})
 })
