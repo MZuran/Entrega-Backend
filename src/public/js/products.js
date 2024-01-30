@@ -7,6 +7,7 @@ async function onClickTest() {
           if (response.ok) {
             // Session on the server side has been destroyed, you can handle success here
             console.log('Session destroyed successfully');
+            window.location.href = "/users/login"
           } else {
             // Handle errors here
             console.error('Failed to destroy session');

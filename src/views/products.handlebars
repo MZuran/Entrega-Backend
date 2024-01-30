@@ -6,10 +6,11 @@
     Products
   </h1>
   <div>
+  {{!-- {{log "user:" user}} --}}
   {{#if user}}
-  <p>Welcome back {{user.name}}! <br>
+  <p>Welcome back {{user.first_name}}! <br>
   Logged in as {{user.role}} <br>
-  Is this not you? <a href="" onclick="onClickTest()">Logout</a></p>
+  Is this not you? <a onclick="onClickTest()">Logout</a></p>
   {{else}}
   <p>Welcome! <br>
   New to our site? <a href="/users/login">Log in</a></p>

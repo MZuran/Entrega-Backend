@@ -9,7 +9,7 @@ async(req,res) => {
   res.send({staus: 'success', message: 'User Registered Successfully'})
 })
 
-sessionRouter.send('/failRegister', async(req,res) => {res.send({error: "Failed"})})
+sessionRouter.get('/failRegister', async(req,res) => {res.send({error: "Failed"})})
 
 //Login
 sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/failLogin'}),
@@ -20,19 +20,27 @@ async(req, res) => {
     first_name: req.user.first_name,
     last_name: req.user.last_name,
     age: req.user.age,
-    email: req.user.email
+    email: req.user.email,
+    role: req.user.role
   }
 
-  req.send({status: 'Success', payload: req.user})
+  res.send({status: 'Success', payload: req.user})
 })
 
-Router.get('/failLogin', (req,res)=>{res.send({error: 'Failed Login'})})
+sessionRouter.get('/failLogin', (req,res)=>{res.send({error: 'Failed Login'})})
 
 //Logout
 sessionRouter.post('/logout', async (req, res) => {
-  req.session.destroy()
-  res.send({status: "success", payload: {}})
-})
+
+    req.session.destroy(function(err){
+      if(err){
+         console.log(err);
+      }else{
+          res.redirect('/users/login');
+      }
+   });
+ }); 
+
 
 export default sessionRouter
 
