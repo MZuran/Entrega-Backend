@@ -2,6 +2,7 @@ import express from "express"
 import { manager } from "../main.js"
 import { cartManager } from "../main.js"
 import { parseQueryParams } from "../auxiliary functions/parseQuery.js"
+import passport from "passport"
 
 const viewsRouter = express.Router()
 

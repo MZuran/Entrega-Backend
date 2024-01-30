@@ -29,6 +29,10 @@ import chatDao from "./dao/dbManager/chat.dao.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+//Import Passport
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+
 //Initialize App
 const app = express()
 
@@ -55,7 +59,7 @@ mongoose.connect(mongoDBUrl)
 .then(() => console.log("Connected to Database"))
 .catch((err) => console.log(err))
 
-//Sessions
+//Middlewares
 app.use(session({
     secret: "secretKey",
     resave: true,
@@ -67,6 +71,9 @@ app.use(session({
         //mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     })
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 export function logOut() {
     //req.session.destroy(err => console.log(err))
