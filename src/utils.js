@@ -1,7 +1,8 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import { jwt } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
 
 export const PRIVATE_KEY = "SecretJSONWebTokenKey"
 
@@ -23,6 +24,17 @@ export const authToken = (req, res, next) => {
         req.user = credentials.user
         next()
     })
+}
+
+export const passportCall = (strategy) => {
+    return async (req,res,next) => {
+        passport.authenticate(strategy, function(err, user, info) {
+            if (err) return next(err)
+            if (!user) { return res.status(401).send({ error: info.messages?info.messages:info.toString() }) }
+            req.user = user
+            next()
+        })(req,res,next)
+    }
 }
 
 //Bcrypt

@@ -1,33 +1,54 @@
 import express from 'express'
 import passport from 'passport'
+import { authToken, generateToken } from '../utils.js';
+import { userModel } from '../dao/models/user.model.js';
+import { createHash, isValidPassword } from '../utils.js';
+
+import { passportCall } from '../utils.js';
+
+import { PRIVATE_KEY } from '../utils.js';
 
 const sessionRouter = express.Router()
 
 //Register
-sessionRouter.post('/register', passport.authenticate('register', {failureRedirect: '/failRegister'}),
-async(req,res) => {
-  res.send({staus: 'success', message: 'User Registered Successfully'})
-})
+sessionRouter.post('/register',async (req,res) => {
+  const {name,email,passowrd} = req.body
+  const exists = await userModel.findOne({ email: email })
+  if (exists) return res.status(400).send({status: "error", error: "User already exists"})
+  const user = {name, email, passowrd: createHash(passowrd), age, role: "user"}
+  const result = await userModel.create(user)
 
-sessionRouter.get('/failRegister', async(req,res) => {res.send({error: "Failed"})})
+  const access_token = generateToken(user)
+  console.log("My access token is", access_token)
+
+  res.cookie('cookieToken', access_token, {
+    maxAge: 60 * 60 * 1000,
+    httpOnly: true
+  }).send({message: "Registered!"})
+})
 
 //Login
-sessionRouter.post('/login', passport.authenticate('login', {failureRedirect: '/failLogin'}),
-async(req, res) => {
-  if (!req.user) return res.status(400).send({staus: 'Error', error: 'Invalid Credentials'})
+sessionRouter.post('/login', async (req,res)=>{
+  const {email,password} = req.body
+  try {
+    const user = await userModel.findOne({ email: email })
+    if (!user) { res.status(400).send({status: "error", error: "User Not Registered"}) }
+    if (!isValidPassword(user, password)) {res.status(401).send({status: "error", error: "Invalid Credentials"})}
 
-  req.session.user ={
-    first_name: req.user.first_name,
-    last_name: req.user.last_name,
-    age: req.user.age,
-    email: req.user.email,
-    role: req.user.role
+    const access_token = generateToken(user)
+
+    console.log("Generated Access Token", access_token)
+
+    res.cookie('cookieToken', access_token, {
+      maxAge: 60 * 60 * 1000,
+      httpOnly: true
+    }).send({message: "Logged In!"});
+    
+
+  } catch (error) {
+    res.status(400).send({status: "error", error: "Error When logging in: " + error})
   }
-
-  res.send({status: 'Success', payload: req.user})
 })
-
-sessionRouter.get('/failLogin', (req,res)=>{res.send({error: 'Failed Login'})})
 
 //Logout
 sessionRouter.post('/logout', async (req, res) => {
@@ -41,39 +62,9 @@ sessionRouter.post('/logout', async (req, res) => {
    });
  }); 
 
+//Current
+sessionRouter.get('/current', passportCall('jwt'), (req, res) => {
+  res.send(req.user)
+})
 
 export default sessionRouter
-
-//Register
-/* sessionRouter.post('/register', async (req, res) => {
-  const { first_name, last_name, email, age, password } = req.body
-
-  //Find out if the user already exists in DB
-  const exists = await userModel.findOne({email})
-  if (exists) {res.status(400).send({status: "error", payload: {message: "User already registered in DB"}})}
-
-  const user = { first_name, last_name, email, age, password: createHash(password) }
-
-  const result = userModel.create(user)
-  res.send({status: "success", payload: {message: "User created successfully", user: result}})
-}) */
-
-//Login
-/* sessionRouter.post('/login', async (req, res) => {
-    const {email, password} = req.body
-    const user = await userModel.findOne({email})
-
-    if (!unregisterDecorator) {return res.status(400).send({status: "error", payload: {message: "User not Found"}})}
-    if (!isValidPassword(user,password)) {return res.status(403).send({status: "error", error: "Incorrect Password"})}
-
-    delete user.password;
-    
-    req.session.user = {
-        name: `${user.first_name} ${user.last_name}`,
-        email: user.email,
-        age: user.age,
-        role: user.role
-    }
-
-    res.send({status: "success", payload: {message: "Logged in successfully", user: req.session.user}})
-}) */

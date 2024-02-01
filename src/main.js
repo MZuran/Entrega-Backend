@@ -33,6 +33,9 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 
+//Import Cookies
+import cookieParser from "cookie-parser";
+
 //Initialize App
 const app = express()
 
@@ -71,9 +74,10 @@ app.use(session({
         //mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     })
 }))
-initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(cookieParser())
+initializePassport()
 
 export function logOut() {
     //req.session.destroy(err => console.log(err))

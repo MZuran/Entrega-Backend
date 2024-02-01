@@ -1,7 +1,11 @@
 import passport from 'passport'
 import local from 'passport-local'
 import { userModel } from '../dao/models/user.model.js'
-import { createHash, isValidPassword } from '../utils.js'
+import { PRIVATE_KEY, createHash, isValidPassword } from '../utils.js'
+
+import { generateToken } from '../utils.js'
+
+import jwt from 'passport-jwt'
 
 const localStrategy = local.Strategy
 
@@ -15,15 +19,17 @@ const initializePassport = () => {
       try {
 
         let user = await userModel.findOne({ email: username })
-        if (user) { 
+        if (user) {
           console.log('User Already Exists!')
           console.log("My req.body is", req.body)
           console.log("My user is", user)
-          return done(null, false) }
+          return done(null, false)
+        }
 
         const newUser = { first_name, last_name, email, age, password: createHash(password), }
 
         let result = await userModel.create(newUser)
+
         return done(null, result)
 
       } catch (error) {
@@ -45,9 +51,27 @@ const initializePassport = () => {
       }
     }))
 
+  //Cookie Extractor
+  const cookieExtractor = req => {
+    let token = null
+    console.log("Cookie:",req.cookies)
+    if (req && req.cookies) { token = req.cookies['cookieToken'] }
+    console.log("My Token is", token)
+    return token
+  }
+
+  //Jwt
+  passport.use('jwt', new jwt.Strategy({
+    jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]),
+    secretOrKey: PRIVATE_KEY
+  }, async (jwt_payload, done) => {
+    try { return done(null, jwt_payload) }
+    catch (err) { return done(err) }
+  }
+  ))
+
   //Serializing and Deserializing
   passport.serializeUser((user, done) => { done(null, user._id) })
-
   passport.deserializeUser(async (id, done) => {
     let user = await userModel.findById(id)
     done(null, user)
